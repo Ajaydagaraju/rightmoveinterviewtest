@@ -1,4 +1,6 @@
+@tailwind utilities;
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&display=swap');
 
 :root {
   --background: #ffffff;
@@ -23,4 +25,28 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+@layer utilities {
+  .card {
+    @apply bg-white rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.05)];
+  }
+  .glass {
+    @apply bg-white/70 backdrop-blur;
+  }
+}
+
+.safe-bottom {
+  padding-bottom: max(env(safe-area-inset-bottom), 16px);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.animate-slideUp {
+  animation: slideUp 0.3s ease-out;
 }
