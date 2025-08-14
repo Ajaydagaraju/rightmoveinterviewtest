@@ -30,7 +30,7 @@ function UpcomingSessionCard() {
             className="rounded-full"
             loading="lazy"
           />
-          <div className="flex items-center justify-between gap-2 flex-1">
+          <div className=" gap-2 flex-1">
             <p className="font-semibold text-sm text-gray-800">Dr. Kiran Rathi</p>
             <IoCallOutline
               className="rounded-full p-1 bg-violet-500 text-white"
