@@ -6,11 +6,10 @@ export default function SelectField({ label, value, options, onChange }) {
 
   return (
     <div className="w-full relative">
-      {label && <label className="block text-sm font-medium mb-1">{label}</label>}
-
+      {label && <label className="block my-2 text-lg text-gray-500">{label}</label>}
       <div
         onClick={() => setOpen(!open)}
-        className="flex justify-between items-center px-3 py-2 rounded-xl bg-gradient-to-r from-[#f5d6e0] to-[#e3d4f7] border border-[#d8bfe8] cursor-pointer text-sm"
+        className="flex justify-between items-center px-3 py-3 text-gray-800 text-lg rounded-xl bg-white cursor-pointer"
       >
         <span>{value || "Select an option"}</span>
         <IoChevronDown
@@ -19,7 +18,7 @@ export default function SelectField({ label, value, options, onChange }) {
       </div>
 
       {open && (
-        <div className="absolute z-50 mt-1 w-full bg-white rounded-xl shadow-lg border border-[#f0cbd6] max-h-48 overflow-y-auto">
+        <div className="absolute z-50 mt-1 w-full bg-white rounded-xl text-gray-800 text-lg shadow-lg border border-[#f0cbd6] max-h-48 overflow-y-auto">
           {options.map((opt, idx) => (
             <div
               key={idx}
