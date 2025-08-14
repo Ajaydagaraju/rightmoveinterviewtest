@@ -1,7 +1,9 @@
 'use client';
+import { memo } from 'react';
 
-export default function TextInput({
+function TextInput({
   label,
+  label1,
   placeholder = '',
   value,
   onChange,
@@ -15,7 +17,7 @@ export default function TextInput({
       <div className="relative">
         {textarea ? (
           <>
-            {label && <label className="block text-lg text-gray-500 my-2">Session Details (Optional)</label>}
+            {label && <label className="block text-lg text-gray-500 my-2">{label}</label>}
             <textarea
               className="w-full rounded-xl bg-white border border-[#f0cbd6] text-gray-500 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#d7b0e9] focus:border-transparent placeholder:text-gray-400"
               placeholder={placeholder}
@@ -27,7 +29,7 @@ export default function TextInput({
           </>
         ) : (
           <>
-             <label className="block text-lg text-gray-500 my-2">Online Session Link</label>
+            {label && <label className="block text-lg text-gray-500 my-2">{label1}</label>}
             <input
               type="text"
               className="w-full rounded-xl bg-white border border-[#f0cbd6] text-gray-500 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#d7b0e9] focus:border-transparent placeholder:text-gray-400"
@@ -42,3 +44,5 @@ export default function TextInput({
     </div>
   );
 }
+
+export default memo(TextInput);

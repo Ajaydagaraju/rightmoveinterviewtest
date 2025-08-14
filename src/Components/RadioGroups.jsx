@@ -1,4 +1,7 @@
-export default function RadioGroup({ label, options, selected, onChange }) {
+'use client';
+import { memo } from 'react';
+
+function RadioGroup({ label, options, selected, onChange }) {
   return (
     <div>
       <label className="block my-2 text-lg text-gray-500">{label}</label>
@@ -19,3 +22,5 @@ export default function RadioGroup({ label, options, selected, onChange }) {
     </div>
   );
 }
+
+export default memo(RadioGroup);

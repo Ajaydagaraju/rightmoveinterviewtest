@@ -1,6 +1,7 @@
 'use client';
+import { memo } from 'react';
 
-export default function TimePicker({
+function TimePicker({
   label = 'Session Time Slot',
   value = '',
   onChange,
@@ -19,13 +20,9 @@ export default function TimePicker({
           step={step}
           disabled={disabled}
         />
-        {/* <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="9" stroke="#888" />
-            <path d="M12 7v6l4 2" stroke="#888" />
-          </svg>
-        </span> */}
       </div>
     </div>
   );
 }
+
+export default memo(TimePicker);

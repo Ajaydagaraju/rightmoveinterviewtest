@@ -1,102 +1,70 @@
 'use client';
-import { useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { IoChevronDown, IoChevronUpOutline } from 'react-icons/io5';
 import { MdClose } from 'react-icons/md';
 import Button from './Button';
+import { sessionData } from '@/utils/utils';
 
-const sessionData = [
-  {
-    period: 'Morning',
-    slots: [
-      { time: '08:00 AM', available: false },
-      { time: '09:00 AM', available: false },
-      { time: '10:00 AM', available: true },
-      { time: '11:00 AM', available: true },
-    ],
-  },
-  {
-    period: 'Afternoon',
-    slots: [
-      { time: '12:00 PM', available: true },
-      { time: '01:00 PM', available: false },
-      { time: '02:00 PM', available: true },
-      { time: '03:00 PM', available: true },
-    ],
-  },
-  {
-    period: 'Evening',
-    slots: [
-      { time: '04:00 PM', available: true },
-      { time: '05:00 PM', available: true },
-      { time: '06:00 PM', available: false },
-      { time: '07:00 PM', available: true },
-    ],
-  },
-  {
-    period: 'Night',
-    slots: [
-      { time: '08:00 PM', available: true },
-      { time: '09:00 PM', available: true },
-      { time: '10:00 PM', available: true },
-      { time: '11:00 PM', available: false },
-    ],
-  },
-];
-
-export default function SlotBookingModal({ onClose }) {
+function SlotBookingModal({ onClose, fullWidth }) {
   const [expanded, setExpanded] = useState(sessionData.map(() => true));
   const [selectedSlot, setSelectedSlot] = useState(null);
 
-  const togglePeriod = (index) => {
-    setExpanded((prev) =>
-      prev.map((v, i) => (i === index ? !v : v))
-    );
-  };
+  const togglePeriod = useCallback((index) => {
+    setExpanded((prev) => prev.map((v, i) => (i === index ? !v : v)));
+  }, []);
 
-  const confirmBooking = () => {
+  const handleSlotSelect = useCallback((time) => {
+    setSelectedSlot(time);
+  }, []);
+
+  const confirmBooking = useCallback(() => {
     if (!selectedSlot) return;
     alert('Appointment booked');
     onClose();
-  };
+  }, [selectedSlot, onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-baseline-last justify-center bg-black/40 ">
+    <div className={`fixed inset-0 z-50 flex items-end justify-center bg-black/40 ${fullWidth ? 'w-full' : ''}`}>
       <div className="bg-gradient-to-b from-[#f4ecf9] to-[#fde8eb] rounded-t-3xl w-full max-w-full overflow-hidden shadow-lg">
-        <div className="flex items-center text-gray-800 justify-between py-5 px-4 border-b mb-5 border-gray-200 bg-white">
+        <div className="flex items-center justify-between py-5 px-4 border-b border-gray-200 bg-white text-gray-800">
           <div></div>
-          <h2 className="text-lg">Select Session Time</h2>
-          <button onClick={onClose} className="text-lg"> <MdClose /> </button>
+          <h2 className="text-lg font-medium ">Select Session Time</h2>
+          <button onClick={onClose} aria-label="Close" className="text-lg">
+            <MdClose />
+          </button>
         </div>
 
         <div className="max-h-[70vh] overflow-y-auto p-4 space-y-4">
           {sessionData.map((session, i) => (
-            <div key={i} className='bg-white p-4 rounded' >
+            <div key={session.period} className="bg-white p-4 rounded-lg">
               <button
                 className="flex items-center justify-between w-full text-gray-700 text-md"
                 onClick={() => togglePeriod(i)}
+                aria-expanded={expanded[i]}
               >
                 {session.period}
                 <IoChevronDown
-                  className={`transition-transform ${expanded[i] ? "rotate-180" : ""}`} />
+                  className={`transition-transform ${expanded[i] ? 'rotate-180' : ''}`}
+                />
               </button>
 
               {expanded[i] && (
                 <div className="grid grid-cols-4 gap-2 my-4">
-                  {session.slots.map((slot, idx) => {
+                  {session.slots.map((slot) => {
                     const isSelected = selectedSlot === slot.time;
                     return (
                       <button
-                        key={idx}
+                        key={slot.time}
                         disabled={!slot.available}
-                        onClick={() => setSelectedSlot(slot.time)}
-                        className={`px-4 py-3 text-xs rounded-lg border transition
-                          ${slot.available
+                        onClick={() => handleSlotSelect(slot.time)}
+                        className={`px-4 py-3 text-xs rounded-lg border transition-colors ${
+                          slot.available
                             ? isSelected
-                              ? ' border-red-400 text-red-500 font-semibold'
+                              ? 'border-red-400 text-red-500 font-semibold'
                               : 'border-red-300 text-red-400 hover:bg-red-50'
-                            : ' text-red-200 border-red-200 cursor-not-allowed'
-                          }
-                        `}
+                            : 'text-red-200 border-red-200 cursor-not-allowed'
+                        }`}
+                        aria-label={`Select ${slot.time} slot`}
                       >
                         {slot.time}
                       </button>
@@ -108,23 +76,28 @@ export default function SlotBookingModal({ onClose }) {
           ))}
         </div>
 
-        <div className="flex gap-3 w-full p-4 justify-center border-t text-center border-gray-200">
+        <div className="flex gap-3 w-full p-4 justify-center border-t border-gray-200">
           <button
             onClick={onClose}
-            className="flex-1 rounded-xl px-6 py-4 w-1/2  text-red-400 border border-red-200"
+            className="flex-1 rounded-xl px-6 py-4 text-red-400 border border-red-200"
+            aria-label="Cancel booking"
           >
             Cancel
           </button>
-          <Button onClick={confirmBooking}
-            text='Confirm'
+          <Button
+            onClick={confirmBooking}
+            text="Confirm"
             disabled={!selectedSlot}
-
-            classes={`flex-1 w-1/2 rounded-xl font-medium ${selectedSlot
+            classes={`flex-1 w-1/2 rounded-xl font-medium ${
+              selectedSlot
                 ? 'bg-gradient-to-r from-[#c59adf] to-[#e5a4a8] text-white'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              }`} />
+            }`}
+          />
         </div>
       </div>
     </div>
   );
 }
+
+export default memo(SlotBookingModal);

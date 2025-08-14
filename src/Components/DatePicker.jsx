@@ -1,6 +1,7 @@
 'use client';
+import { memo } from 'react';
 
-export default function DatePicker({
+function DatePicker({
   label = 'Session Date',
   value = '',
   onChange,
@@ -9,7 +10,7 @@ export default function DatePicker({
 }) {
   return (
     <div>
-      <label className="block text-lg my-2 text-gray-500">{label}</label>
+      <label className="block text-lg text-gray-500 my-2">{label}</label>
       <div className="relative">
         <input
           type="date"
@@ -19,13 +20,9 @@ export default function DatePicker({
           min={min}
           disabled={disabled}
         />
-        {/* <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="5" width="18" height="16" rx="3" stroke="#888" />
-            <path d="M8 3v4M16 3v4M3 9h18" stroke="#888" />
-          </svg>
-        </span> */}
       </div>
     </div>
   );
 }
+
+export default memo(DatePicker);
