@@ -23,7 +23,7 @@ function DoctorCard({
       <button
         onClick={toggleOpen}
         className="w-full flex items-center justify-between"
-        aria-expanded={open}
+        aria-expanded={isOpen}
       >
         <div className="flex items-center gap-3">
           <Image
