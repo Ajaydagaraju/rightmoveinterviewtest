@@ -5,9 +5,10 @@ import PatientCard from '@/Components/PatientCard';
 import PractitionerCard from '@/Components/PractitionerCard';
 import RadioGroup from '@/Components/RadioGroups';
 import SelectField from '@/Components/SelectField';
+import SlotBookingModal from '@/Components/SlotBookingModal';
 import TextInput from '@/Components/TextInput';
 import TimePicker from '@/Components/TimePicker';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { IoChevronBackOutline } from 'react-icons/io5';
 
 export default function ScheduleSessionPage() {
@@ -16,11 +17,22 @@ export default function ScheduleSessionPage() {
   const [sessionDate, setSessionDate] = useState('');
   const [sessionTime, setSessionTime] = useState('');
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [showBooking, setShowBooking] = useState(false);
+
+  const toggleBooking = useCallback(() => setShowBooking((prev) => !prev), []);
 
   const handleSessionTypeChange = useCallback((e) => setSessionType(e.target.value), []);
   const handleSessionModeChange = useCallback(setSessionMode, []);
   const handleSessionDateChange = useCallback(setSessionDate, []);
   const handleSessionTimeChange = useCallback(setSessionTime, []);
+
+  useEffect(() => {
+    if (sessionDate) {
+      setShowBooking(true)
+    } else {
+
+    }
+  }, [sessionDate])
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#e7d7ff] via-[#f3d7e5] to-[#f9e0dd]">
@@ -51,7 +63,7 @@ export default function ScheduleSessionPage() {
         </div>
 
         {sessionMode === 'Online' && (
-          <TextInput placeholder="Add Online Session Link or WhatsApp Number"  label="Session Details (Optional)" label1="Online Session Link"/>
+          <TextInput placeholder="Add Online Session Link or WhatsApp Number" label="Session Details (Optional)" label1="Online Session Link" />
         )}
 
         <TextInput placeholder="Enter session details here" textarea label="Session Details (Optional)" />
@@ -66,13 +78,19 @@ export default function ScheduleSessionPage() {
         <Button
           text="Confirm"
           disabled={!selectedSlot}
-          classes={`flex-1 w-1/2 rounded-xl font-medium ${
-            selectedSlot
+          classes={`flex-1 w-1/2 rounded-xl font-medium ${selectedSlot
               ? 'bg-gradient-to-r from-[#c59adf] to-[#e5a4a8] text-white'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-          }`}
+            }`}
         />
       </div>
+       {showBooking && (
+        <div className="fixed inset-0 z-50 flex flex-col justify-end bg-black/40">
+          <div className="w-full bg-gradient-to-b from-[#f4ecf9] to-[#fde8eb] rounded-t-3xl shadow-xl transition-transform duration-300">
+            <SlotBookingModal onClose={toggleBooking} fullWidth />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

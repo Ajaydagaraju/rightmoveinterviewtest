@@ -11,10 +11,12 @@ function DoctorCard({
   gender = 'Male',
   fee = '₹1,500/-',
   onBookNow,
+  isOpen,
+  onToggle,
 }) {
-  const [open, setOpen] = useState(false);
-
-  const toggleOpen = useCallback(() => setOpen((prev) => !prev), []);
+ const toggleOpen = useCallback(() => {
+    onToggle();
+  }, [onToggle]);
 
   return (
     <div className="card p-4 bg-white rounded-lg shadow-sm">
@@ -38,11 +40,11 @@ function DoctorCard({
           </div>
         </div>
         <IoChevronDown
-          className={`transition-transform text-gray-500 ${open ? 'rotate-180' : ''}`}
+          className={`transition-transform text-gray-500 ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
 
-      {open && (
+      {isOpen && (
         <>
           <hr className="my-4 border-gray-200" />
           <div className="my-4 text-gray-500 grid grid-cols-2 gap-3 text-sm">

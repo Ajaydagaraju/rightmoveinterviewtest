@@ -2,13 +2,23 @@
 import DoctorCard from '@/Components/DoctorCard';
 import SearchField from '@/Components/SearchField';
 import SlotBookingModal from '@/Components/SlotBookingModal';
+import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { IoChevronBackOutline } from 'react-icons/io5';
 
 export default function DoctorsPage() {
-  const [showBooking, setShowBooking] = useState(false);
+  const route = useRouter();
+  const [openCardIndex, setOpenCardIndex] = useState(null);
 
   const toggleBooking = useCallback(() => setShowBooking((prev) => !prev), []);
+
+  const handleBookNow = () => {
+    route.push('/add-patient');
+  };
+
+  const handleToggleCard = useCallback((index) => {
+    setOpenCardIndex((prev) => (prev === index ? null : index));
+  }, []);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-[#e7d7ff] via-[#f3d7e5] to-[#f9e0dd] pb-8">
@@ -34,18 +44,21 @@ export default function DoctorsPage() {
             phone={doctor.phone}
             specialty={doctor.specialty}
             gender={doctor.gender}
-            onBookNow={toggleBooking}
+            fee="₹1,500/-"
+            isOpen={openCardIndex === index}
+            onToggle={() => handleToggleCard(index)}
+            onBookNow={handleBookNow}
           />
         ))}
       </div>
 
-      {showBooking && (
+      {/* {showBooking && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end bg-black/40">
           <div className="w-full bg-gradient-to-b from-[#f4ecf9] to-[#fde8eb] rounded-t-3xl shadow-xl transition-transform duration-300">
             <SlotBookingModal onClose={toggleBooking} fullWidth />
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
